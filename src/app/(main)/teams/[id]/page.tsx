@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Badge } from '@/components/ui/badge'
@@ -5,6 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { GENDER_LABELS, LEVEL_LABELS, AGE_GROUP_LABELS } from '@/lib/constants'
 import { ActivityGrass } from '@/components/ActivityGrass'
 import { ActivityFeed, type ActivityItem } from '@/components/ActivityFeed'
+import { DeleteTeamButton } from '@/app/(dashboard)/my-team/delete-button'
+
+const btnOutline = 'inline-flex items-center justify-center rounded-lg text-sm font-medium h-10 px-4 border border-border bg-background hover:bg-muted hover:text-foreground'
 
 export default async function TeamDetailPage({
   params,
@@ -14,6 +18,8 @@ export default async function TeamDetailPage({
   const { id } = await params
   const supabase = await createClient()
 
+  const { data: { user } } = await supabase.auth.getUser()
+
   const { data: team } = await supabase
     .from('teams')
     .select('*')
@@ -22,6 +28,8 @@ export default async function TeamDetailPage({
     .single()
 
   if (!team) notFound()
+
+  const isOwner = user?.id === team.admin_id
 
   // 활동 기록 (장소 + 사진 포함)
   const { data: matches } = await supabase
@@ -46,7 +54,7 @@ export default async function TeamDetailPage({
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 px-4 py-12">
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-4 py-12">
       {/* 팀 프로필 */}
       <Card>
         <CardHeader>
@@ -78,30 +86,37 @@ export default async function TeamDetailPage({
               <span className="text-zinc-500">연령대</span>
               <p>{AGE_GROUP_LABELS[team.age_group]}</p>
             </div>
-            <div>
-              <span className="text-zinc-500">인스타그램</span>
-              <a
-                href={`https://instagram.com/${team.instagram_handle}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                @{team.instagram_handle}
-              </a>
-            </div>
+            {team.instagram_handle && (
+              <div>
+                <span className="text-zinc-500">인스타그램</span>
+                <a
+                  href={`https://instagram.com/${team.instagram_handle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  @{team.instagram_handle}
+                </a>
+              </div>
+            )}
           </div>
+
+          {isOwner && (
+            <div className="flex gap-2 border-t pt-4">
+              <Link href="/my-team/edit" className={btnOutline}>수정</Link>
+              <DeleteTeamButton teamId={team.id} />
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      {/* 잔디 */}
       <section>
-        <h2 className="mb-4 text-lg font-bold">활동 잔디</h2>
         <ActivityGrass activityMap={activityMap} />
       </section>
 
-      {/* 활동 기록 피드 */}
+      {/* 사진 */}
       <section>
-        <h2 className="mb-4 text-lg font-bold">활동 기록</h2>
+        <h2 className="mb-4 text-lg font-bold">사진</h2>
         <ActivityFeed activities={activities} />
       </section>
     </div>

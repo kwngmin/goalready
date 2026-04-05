@@ -1,3 +1,5 @@
+'use client'
+
 import type { Match, Place, Photo } from '@/types'
 
 export interface ActivityItem extends Match {
@@ -11,35 +13,29 @@ export function ActivityFeed({ activities }: { activities: ActivityItem[] }) {
   }
 
   return (
-    <div className="space-y-4">
-      {activities.map((activity) => (
-        <div key={activity.id} className="rounded-lg border p-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="font-medium">{activity.place.name}</p>
-              <p className="text-sm text-zinc-500">{activity.place.address}</p>
+    <div className="grid grid-cols-3 gap-1">
+      {activities.map((activity) => {
+        const thumbnail = activity.photos[0]?.image_url
+        return (
+          <div key={activity.id} className="group relative aspect-square overflow-hidden bg-zinc-100">
+            {thumbnail ? (
+              <img
+                src={thumbnail}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-sm text-zinc-300">
+                No Photo
+              </div>
+            )}
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+              <p className="text-sm font-medium text-white">{activity.played_at}</p>
+              <p className="mt-1 text-sm text-white/80">{activity.place.name}</p>
             </div>
-            <time className="shrink-0 text-sm text-zinc-400">{activity.played_at}</time>
           </div>
-
-          {activity.description && (
-            <p className="mt-2 text-sm text-zinc-600">{activity.description}</p>
-          )}
-
-          {activity.photos.length > 0 && (
-            <div className="mt-3 flex gap-2 overflow-x-auto">
-              {activity.photos.map((photo) => (
-                <img
-                  key={photo.id}
-                  src={photo.image_url}
-                  alt=""
-                  className="h-24 w-24 shrink-0 rounded-md object-cover"
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

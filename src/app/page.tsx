@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { Header } from '@/components/Header'
 
 const btnBase = 'inline-flex items-center justify-center rounded-4xl text-sm font-medium h-10 px-4'
 const btnPrimary = `${btnBase} bg-primary text-primary-foreground hover:bg-primary/80`
@@ -18,21 +19,7 @@ export default async function LandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* 헤더 */}
-      <header className="border-b">
-        <nav className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <span className="text-lg font-bold">풋살고</span>
-          <div className="flex items-center gap-6">
-            <Link href="/map" className="text-sm hover:underline">지도</Link>
-            <Link href="/teams" className="text-sm hover:underline">팀 목록</Link>
-            {user ? (
-              <Link href="/my-team" className="text-sm hover:underline">내 팀</Link>
-            ) : (
-              <Link href="/login" className="text-sm hover:underline">로그인</Link>
-            )}
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       {/* 히어로 */}
       <section className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">

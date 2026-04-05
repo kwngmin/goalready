@@ -54,7 +54,7 @@ export function VenueSearch({ defaultVenue, onSelect }: VenueSearchProps) {
         setResults([])
       }
     })
-  }, [query])
+  }, [query, ready])
 
   const handleSelect = (venue: Venue) => {
     setSelected(venue)
@@ -65,7 +65,7 @@ export function VenueSearch({ defaultVenue, onSelect }: VenueSearchProps) {
 
   if (selected) {
     return (
-      <div className="flex items-center justify-between rounded-md border px-3 py-2">
+      <div className="flex items-center justify-between rounded-lg border px-3 py-2">
         <div>
           <p className="font-medium">{selected.name}</p>
           <p className="text-sm text-zinc-500">{selected.address}</p>
@@ -98,13 +98,13 @@ export function VenueSearch({ defaultVenue, onSelect }: VenueSearchProps) {
         <button
           type="button"
           onClick={search}
-          className="shrink-0 rounded-md bg-zinc-900 px-3 text-sm text-white hover:bg-zinc-700"
+          className="shrink-0 rounded-lg bg-zinc-900 px-3 text-sm text-white hover:bg-zinc-700"
         >
           {searching ? '검색중...' : '검색'}
         </button>
       </div>
       {results.length > 0 && (
-        <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-white shadow-lg">
+        <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border bg-white shadow-lg">
           {results.map((venue) => (
             <li key={venue.kakaoPlaceId}>
               <button

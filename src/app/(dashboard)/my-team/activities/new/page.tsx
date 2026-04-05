@@ -19,7 +19,7 @@ export default async function NewActivityPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12">
+    <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <h1 className="mb-8 text-2xl font-bold">활동 기록 등록</h1>
       <ActivityForm />
     </div>

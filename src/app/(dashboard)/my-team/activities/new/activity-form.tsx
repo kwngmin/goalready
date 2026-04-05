@@ -23,7 +23,7 @@ export function ActivityForm() {
   const [photoUrls, setPhotoUrls] = useState<string[]>([])
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-8">
       {/* 숨은 필드: 장소 정보 */}
       {venue && (
         <>
@@ -41,7 +41,7 @@ export function ActivityForm() {
       ))}
 
       <div className="space-y-2">
-        <Label htmlFor="played_at">날짜 *</Label>
+        <Label htmlFor="played_at">날짜</Label>
         <Input
           id="played_at"
           name="played_at"
@@ -52,7 +52,7 @@ export function ActivityForm() {
       </div>
 
       <div className="space-y-2">
-        <Label>장소 *</Label>
+        <Label>장소</Label>
         <VenueSearch onSelect={setVenue} />
       </div>
 
@@ -62,7 +62,7 @@ export function ActivityForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">메모</Label>
+        <Label htmlFor="description">메모 <span className="text-zinc-400 font-normal">(선택)</span></Label>
         <Textarea id="description" name="description" rows={2} placeholder="오늘 경기 한 줄 메모" />
       </div>
 
@@ -70,7 +70,7 @@ export function ActivityForm() {
         <p className="text-sm text-red-500">{state.error}</p>
       )}
 
-      <Button type="submit" className="w-full" disabled={pending || !venue}>
+      <Button type="submit" className="h-12 w-full !rounded-lg text-base" disabled={pending || !venue}>
         {pending ? '등록 중...' : '활동 기록 등록'}
       </Button>
     </form>
