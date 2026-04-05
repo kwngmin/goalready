@@ -1,14 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Pencil } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { GENDER_LABELS, LEVEL_LABELS, AGE_GROUP_LABELS } from '@/lib/constants'
+import { GENDER_LABELS, LEVEL_LABELS, LEVEL_DESCRIPTIONS, AGE_GROUP_LABELS } from '@/lib/constants'
 import { ActivityGrass } from '@/components/ActivityGrass'
 import { ActivityFeed, type ActivityItem } from '@/components/ActivityFeed'
 import { DeleteTeamButton } from '@/app/(dashboard)/my-team/delete-button'
 
-const btnOutline = 'inline-flex items-center justify-center rounded-lg text-sm font-medium h-10 px-4 border border-border bg-background hover:bg-muted hover:text-foreground'
+const btnIcon = 'flex h-9 w-9 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600'
 
 export default async function TeamDetailPage({
   params,
@@ -53,72 +52,90 @@ export default async function TeamDetailPage({
     activityMap[a.played_at] = (activityMap[a.played_at] ?? 0) + 1
   }
 
+  const createdDate = new Date(team.created_at).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 px-4 py-12">
-      {/* 팀 프로필 */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-4">
-            {team.logo_url && (
-              <img src={team.logo_url} alt="" className="h-14 w-14 rounded-full object-cover" />
-            )}
-            <div className="flex flex-1 items-center justify-between">
-              <CardTitle className="text-2xl">{team.name}</CardTitle>
-              <Badge variant="outline">{LEVEL_LABELS[team.level]}</Badge>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {team.description && (
-            <p className="text-zinc-600">{team.description}</p>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-zinc-500">인원</span>
-              <p>{team.member_count}명</p>
-            </div>
-            <div>
-              <span className="text-zinc-500">구분</span>
-              <p>{GENDER_LABELS[team.gender]}</p>
-            </div>
-            <div>
-              <span className="text-zinc-500">연령대</span>
-              <p>{AGE_GROUP_LABELS[team.age_group]}</p>
-            </div>
-            {team.instagram_handle && (
-              <div>
-                <span className="text-zinc-500">인스타그램</span>
-                <a
-                  href={`https://instagram.com/${team.instagram_handle}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  @{team.instagram_handle}
-                </a>
-              </div>
-            )}
-          </div>
-
+    <div className="mx-auto w-full max-w-4xl py-6">
+      {/* 상단: 좌우 패딩 있음 */}
+      <div className="space-y-8 px-4">
+      {/* 팀 프로필 그룹 */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-1.5 text-sm font-medium text-zinc-500">
+            {team.status === 'active' && <span className="inline-block h-3 w-3 rounded-full bg-emerald-600" />}
+            등록일: {createdDate}
+          </span>
           {isOwner && (
-            <div className="flex gap-2 border-t pt-4">
-              <Link href="/my-team/edit" className={btnOutline}>수정</Link>
-              <DeleteTeamButton teamId={team.id} />
+            <div className="flex gap-1">
+              <Link href="/my-team/edit" className={btnIcon}>
+                <Pencil size={18} />
+              </Link>
+              <DeleteTeamButton teamId={team.id} iconOnly />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+
+        <div className="rounded-md border">
+          <div className="flex items-center gap-4 px-4 py-4">
+            {team.logo_url && (
+              <img src={team.logo_url} alt="" className="h-20 w-20 rounded-full object-cover" />
+            )}
+            <div>
+              <h1 className="text-2xl font-bold">{team.name}</h1>
+              <p className="mt-1 text-base font-medium text-zinc-500">
+                {LEVEL_LABELS[team.level]} - {LEVEL_DESCRIPTIONS[team.level]}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 border-t py-3 text-center">
+            <div>
+              <p className="text-sm text-zinc-500">구분</p>
+              <p className="mt-1 font-medium">{GENDER_LABELS[team.gender]}</p>
+            </div>
+            <div className="border-x">
+              <p className="text-sm text-zinc-500">인원</p>
+              <p className="mt-1 font-medium">{team.member_count}명</p>
+            </div>
+            <div>
+              <p className="text-sm text-zinc-500">연령대</p>
+              <p className="mt-1 font-medium">{AGE_GROUP_LABELS[team.age_group]}</p>
+            </div>
+          </div>
+        </div>
+
+        {team.description && (
+          <div className="rounded-md bg-zinc-100 px-4 py-3">
+            <p className="mb-1 text-sm font-medium text-zinc-500">소개</p>
+            <p className="text-sm text-zinc-600">{team.description}</p>
+          </div>
+        )}
+      </div>
+
+      {/* 인스타그램 */}
+      {team.instagram_handle && (
+        <a
+          href={`https://instagram.com/${team.instagram_handle}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:underline"
+        >
+          @{team.instagram_handle}
+        </a>
+      )}
 
       <section>
         <ActivityGrass activityMap={activityMap} />
       </section>
+      </div>
 
-      {/* 사진 */}
-      <section>
-        <h2 className="mb-4 text-lg font-bold">사진</h2>
+      {/* 하단: 좌우 패딩 없음 */}
+      <div className="mt-8">
         <ActivityFeed activities={activities} />
-      </section>
+      </div>
     </div>
   )
 }

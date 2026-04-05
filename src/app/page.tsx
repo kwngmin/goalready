@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/Header'
 
-const btnBase = 'inline-flex items-center justify-center rounded-4xl text-sm font-medium h-10 px-4'
+const btnBase = 'inline-flex items-center justify-center rounded-4xl text-sm font-medium h-11 px-4'
 const btnPrimary = `${btnBase} bg-primary text-primary-foreground hover:bg-primary/80`
 const btnOutline = `${btnBase} border border-border bg-background hover:bg-muted hover:text-foreground`
 

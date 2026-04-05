@@ -15,7 +15,7 @@ export default async function EditTeamPage() {
     .single()
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12">
+    <div className="mx-auto w-full max-w-2xl px-4 py-12">
       <h1 className="mb-8 text-2xl font-bold">
         {team ? '팀 정보 수정' : '팀 등록'}
       </h1>

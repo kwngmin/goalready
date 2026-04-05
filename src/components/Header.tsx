@@ -29,7 +29,7 @@ export async function Header() {
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
                 ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 text-xs text-zinc-500">MY</div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 text-sm text-zinc-500">MY</div>
                 )}
               </Link>
             ) : (

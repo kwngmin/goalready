@@ -213,10 +213,14 @@ export function TeamForm({ team }: { team?: Team }) {
       )}
 
       <div className="!mt-10 space-y-2">
-        <Button type="submit" className="h-12 w-full !rounded-lg text-base" disabled={pending || uploading}>
+        <Button type="submit" className="h-14 w-full !rounded-lg text-base" disabled={pending || uploading}>
           {pending ? '저장 중...' : isEditing ? '수정하기' : '등록하기'}
         </Button>
-        {!isEditing && (
+        {isEditing ? (
+          <a href="/my-team" className="block w-full py-2 text-center text-base text-zinc-400 hover:text-zinc-600">
+            취소하기
+          </a>
+        ) : (
           <a href="/my-team" className="block w-full py-2 text-center text-base text-zinc-400 hover:text-zinc-600">
             건너뛰기
           </a>

@@ -17,13 +17,24 @@ interface SelectedVenue {
   lng: string
 }
 
-export function ActivityForm() {
+interface TeamOption {
+  id: string
+  name: string
+  logo_url: string | null
+}
+
+export function ActivityForm({ teams }: { teams: TeamOption[] }) {
   const [state, formAction, pending] = useActionState<ActivityFormState, FormData>(createActivity, {})
   const [venue, setVenue] = useState<SelectedVenue | null>(null)
   const [photoUrls, setPhotoUrls] = useState<string[]>([])
+  const [teamId, setTeamId] = useState(teams[0].id)
+
+  const isSingleTeam = teams.length === 1
 
   return (
     <form action={formAction} className="space-y-8">
+      <input type="hidden" name="team_id" value={teamId} />
+
       {/* 숨은 필드: 장소 정보 */}
       {venue && (
         <>
@@ -39,6 +50,39 @@ export function ActivityForm() {
       {photoUrls.map((url, i) => (
         <input key={i} type="hidden" name="photo_urls" value={url} />
       ))}
+
+      {/* 팀 선택 */}
+      <div className="space-y-2">
+        <Label>팀</Label>
+        {isSingleTeam ? (
+          <div className="flex items-center gap-3 rounded-lg bg-zinc-100 px-4 py-3">
+            {teams[0].logo_url && (
+              <img src={teams[0].logo_url} alt="" className="h-8 w-8 rounded-full object-cover" />
+            )}
+            <span className="font-medium">{teams[0].name}</span>
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {teams.map((team) => (
+              <button
+                key={team.id}
+                type="button"
+                onClick={() => setTeamId(team.id)}
+                className={`flex h-11 items-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors ${
+                  teamId === team.id
+                    ? 'bg-zinc-900 text-white'
+                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                }`}
+              >
+                {team.logo_url && (
+                  <img src={team.logo_url} alt="" className="h-6 w-6 rounded-full object-cover" />
+                )}
+                {team.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="space-y-2">
         <Label htmlFor="played_at">날짜</Label>
@@ -70,7 +114,7 @@ export function ActivityForm() {
         <p className="text-sm text-red-500">{state.error}</p>
       )}
 
-      <Button type="submit" className="h-12 w-full !rounded-lg text-base" disabled={pending || !venue}>
+      <Button type="submit" className="h-14 w-full !rounded-lg text-base" disabled={pending || !venue}>
         {pending ? '등록 중...' : '활동 기록 등록'}
       </Button>
     </form>

@@ -6,7 +6,7 @@ import { GENDER_LABELS, LEVEL_LABELS, AGE_GROUP_LABELS } from '@/lib/constants'
 import { ActivityGrass } from '@/components/ActivityGrass'
 import { LogoutButton } from '@/components/logout-button'
 
-const btnBase = 'inline-flex items-center justify-center rounded-lg text-sm font-medium h-10 px-4'
+const btnBase = 'inline-flex items-center justify-center rounded-lg text-sm font-medium h-11 px-4'
 const btnPrimary = `${btnBase} bg-primary text-primary-foreground hover:bg-primary/80`
 
 export default async function MyTeamPage() {

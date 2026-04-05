@@ -7,21 +7,21 @@ export default async function NewActivityPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: team } = await supabase
+  const { data: teams } = await supabase
     .from('teams')
-    .select('id')
+    .select('id, name, logo_url')
     .eq('admin_id', user.id)
     .is('deleted_at', null)
-    .single()
+    .order('created_at', { ascending: true })
 
-  if (!team) {
-    redirect('/my-team/edit')
+  if (!teams || teams.length === 0) {
+    redirect('/my-team/new')
   }
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <h1 className="mb-8 text-2xl font-bold">활동 기록 등록</h1>
-      <ActivityForm />
+      <ActivityForm teams={teams} />
     </div>
   )
 }

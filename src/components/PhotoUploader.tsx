@@ -54,7 +54,7 @@ export function PhotoUploader({ onUpload }: PhotoUploaderProps) {
             <button
               type="button"
               onClick={() => removePhoto(i)}
-              className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/50 text-xs text-white"
+              className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-sm text-white"
             >
               &times;
             </button>

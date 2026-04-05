@@ -13,16 +13,23 @@ export async function createActivity(_prev: ActivityFormState, formData: FormDat
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // 내 팀 확인
+  const teamId = formData.get('team_id') as string
+
+  if (!teamId) {
+    return { error: '팀을 선택해주세요.' }
+  }
+
+  // 내 팀인지 확인
   const { data: team } = await supabase
     .from('teams')
     .select('id')
+    .eq('id', teamId)
     .eq('admin_id', user.id)
     .is('deleted_at', null)
     .single()
 
   if (!team) {
-    return { error: '먼저 팀을 등록해주세요.' }
+    return { error: '권한이 없는 팀입니다.' }
   }
 
   const playedAt = formData.get('played_at') as string

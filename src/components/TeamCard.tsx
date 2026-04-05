@@ -1,32 +1,19 @@
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { GENDER_LABELS, LEVEL_LABELS, AGE_GROUP_LABELS } from '@/lib/constants'
 import type { Team } from '@/types'
 
 export function TeamCard({ team }: { team: Team }) {
   return (
-    <Link href={`/teams/${team.id}`}>
-      <Card className="transition-shadow hover:shadow-md">
-        <CardHeader className="pb-2">
-          <div className="flex items-center gap-3">
-            {team.logo_url && (
-              <img src={team.logo_url} alt="" className="h-10 w-10 rounded-full object-cover" />
-            )}
-            <div className="flex flex-1 items-center justify-between">
-              <CardTitle className="text-lg">{team.name}</CardTitle>
-              <Badge variant="outline">{LEVEL_LABELS[team.level]}</Badge>
-            </div>
+    <Link href={`/teams/${team.id}`} className="group flex flex-col items-center text-center">
+      <div className="mb-2 h-20 w-20 overflow-hidden rounded-full bg-zinc-100 sm:h-24 sm:w-24">
+        {team.logo_url ? (
+          <img src={team.logo_url} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-sm text-zinc-300">
+            {team.name.charAt(0)}
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-zinc-500">
-            <span>{GENDER_LABELS[team.gender]}</span>
-            <span>{AGE_GROUP_LABELS[team.age_group]}</span>
-            <span>{team.member_count}명</span>
-          </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
+      <p className="px-2 text-sm font-medium group-hover:underline">{team.name}</p>
     </Link>
   )
 }

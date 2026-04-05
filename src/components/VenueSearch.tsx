@@ -73,7 +73,7 @@ export function VenueSearch({ defaultVenue, onSelect }: VenueSearchProps) {
         <button
           type="button"
           onClick={() => setSelected(null)}
-          className="text-sm text-zinc-400 hover:text-zinc-600"
+          className="h-9 rounded-lg px-3 text-sm text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600"
         >
           변경
         </button>
@@ -98,7 +98,7 @@ export function VenueSearch({ defaultVenue, onSelect }: VenueSearchProps) {
         <button
           type="button"
           onClick={search}
-          className="shrink-0 rounded-lg bg-zinc-900 px-3 text-sm text-white hover:bg-zinc-700"
+          className="h-11 shrink-0 rounded-lg bg-zinc-900 px-4 text-sm text-white hover:bg-zinc-700"
         >
           {searching ? '검색중...' : '검색'}
         </button>
@@ -113,7 +113,7 @@ export function VenueSearch({ defaultVenue, onSelect }: VenueSearchProps) {
                 className="w-full px-3 py-2 text-left hover:bg-zinc-50"
               >
                 <p className="text-sm font-medium">{venue.name}</p>
-                <p className="text-xs text-zinc-500">{venue.address}</p>
+                <p className="text-sm text-zinc-500">{venue.address}</p>
               </button>
             </li>
           ))}

@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { TeamCard } from '@/components/TeamCard'
+import { TeamListFilter } from '@/components/TeamListFilter'
 
 export default async function TeamsPage() {
   const supabase = await createClient()
@@ -12,17 +12,9 @@ export default async function TeamsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <h1 className="mb-8 text-2xl font-bold">풋살팀 목록</h1>
-      {!teams || teams.length === 0 ? (
-        <p className="text-zinc-500">등록된 팀이 없습니다.</p>
-      ) : (
-        <div className="space-y-4">
-          {teams.map((team) => (
-            <TeamCard key={team.id} team={team} />
-          ))}
-        </div>
-      )}
+      <TeamListFilter teams={teams ?? []} />
     </div>
   )
 }
