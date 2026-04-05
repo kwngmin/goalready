@@ -5,7 +5,7 @@ import type { VenueMarkerData } from './page'
 
 type FilterMode = 'all' | 'recent'
 
-export function VenueMap({ venues }: { venues: VenueMarkerData[] }) {
+export function VenueMap({ venues, latestPlaceId }: { venues: VenueMarkerData[]; latestPlaceId: string | null }) {
   const mapRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState<FilterMode>('all')
   const [kakaoLoaded, setKakaoLoaded] = useState(false)
@@ -19,9 +19,13 @@ export function VenueMap({ venues }: { venues: VenueMarkerData[] }) {
   useEffect(() => {
     if (!kakaoLoaded || !mapRef.current) return
 
+    const latestVenue = latestPlaceId ? venues.find((v) => v.placeId === latestPlaceId) : null
+    const centerLat = latestVenue?.latitude ?? 36.5
+    const centerLng = latestVenue?.longitude ?? 127.5
+
     const map = new window.kakao.maps.Map(mapRef.current, {
-      center: new window.kakao.maps.LatLng(36.5, 127.5),
-      level: 13,
+      center: new window.kakao.maps.LatLng(centerLat, centerLng),
+      level: 7,
     })
 
     const filteredVenues = venues.filter((v) =>
@@ -103,7 +107,7 @@ export function VenueMap({ venues }: { venues: VenueMarkerData[] }) {
         openOverlay = null
       }
     })
-  }, [kakaoLoaded, venues, filter])
+  }, [kakaoLoaded, venues, filter, latestPlaceId])
 
   return (
     <>

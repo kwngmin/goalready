@@ -22,8 +22,9 @@ export async function Header() {
         <nav className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link href="/" className="text-lg font-bold">풋살고</Link>
           <div className="flex items-center gap-6">
+            <Link href="/teams" className="text-sm hover:underline">풋살팀</Link>
+            <Link href="/venues" className="text-sm hover:underline">구장</Link>
             <Link href="/map" className="text-sm hover:underline">지도</Link>
-            <Link href="/teams" className="text-sm hover:underline">팀 목록</Link>
             {user ? (
               <Link href="/my-team">
                 {avatarUrl ? (

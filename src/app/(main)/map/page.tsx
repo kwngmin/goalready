@@ -65,9 +65,20 @@ export default async function MapPage() {
 
   const venues = Array.from(venueMap.values())
 
+  // 가장 최근 활동기록의 장소
+  const { data: latestMatch } = await supabase
+    .from('matches')
+    .select('place_id')
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single()
+
+  const latestPlaceId = latestMatch?.place_id ?? null
+
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col">
-      <VenueMap venues={venues} />
+      <VenueMap venues={venues} latestPlaceId={latestPlaceId} />
     </div>
   )
 }
